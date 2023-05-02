@@ -1,0 +1,1 @@
+alter table user_session add column archived_at TIMESTAMP WITH TIME ZONE default  now() + interval '1 DAY'
