@@ -4,13 +4,15 @@ import (
 	"time"
 )
 
-type UsersBody struct {
+//var JwtKey = []byte("golang_my_todo")
+
+type Register struct {
 	Name     string `json:"name" db:"name"`
 	Email    string `json:"email" db:"email"`
 	Password string `json:"password" db:"password"` //newly added for login system
 }
 
-type UsersGetBody struct {
+type RetrieveUserInfo struct {
 	Id        int       `json:"id" db:"id"`
 	Name      string    `json:"name" db:"name"`
 	Email     string    `json:"email" db:"email"`
@@ -18,22 +20,22 @@ type UsersGetBody struct {
 	UpdatedAt time.Time `json:"updatedAt" db:"updated_at"`
 }
 
-type TodoBody struct {
-	//UserId      int    `json:"userId" db:"user_id"`
+type Task struct {
 	Task        string `json:"task" db:"task"`
 	Description string `json:"description" db:"description"`
 }
 
-type TodoGetBody struct {
-	Id          int       `json:"id" db:"id"`
-	UserId      int       `json:"userId" db:"user_id"`
-	Task        string    `json:"task" db:"task"`
+type AllTask struct {
+	Id          int       `json:"taskId" db:"id"`
+	Task        string    `json:"taskName" db:"task"`
 	Description string    `json:"description" db:"description"`
-	CreatedAt   time.Time `json:"created_At" db:"created_at"`
-	DueDate     time.Time `json:"dueDate" db:"due_date"`
+	Complete    bool      `json:"completed" db:"is_completed"`
+	DueDate     time.Time `json:"toBeCompletedBy" db:"due_date"`
+	CreatedAt   time.Time `json:"createdAt" db:"created_at"`
 }
 
-type TodoUpdateBody struct {
+type UpdateTask struct {
+	Id          int    `json:"id" db:"id"`
 	Task        string `json:"task" db:"task"`
 	Description string `json:"description" db:"description"`
 }
@@ -44,3 +46,21 @@ type User struct {
 	Email     string    `json:"email" db:"email"`
 	CreatedAt time.Time `json:"createdAt" db:"created_at"`
 }
+
+type Login struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type UserPass struct {
+	UserID   int    `db:"user_id"`
+	Password string `db:"password"`
+}
+
+//type JwtClaims struct {
+//	Session  string    `json:"session"`
+//	Auth     bool      `json:"auth"`
+//	Username string    `json:"username"`
+//	Exp      time.Time `json:"exp"`
+//	jwt.StandardClaims
+//}

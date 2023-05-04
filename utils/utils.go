@@ -2,8 +2,6 @@ package utils
 
 import (
 	"crypto/rand"
-	"crypto/sha512"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/go-playground/validator/v10"
@@ -80,14 +78,14 @@ func RespondJSON(w http.ResponseWriter, StatusCode int, body interface{}) {
 }
 func RespondError(w http.ResponseWriter, statusCode int, err error, messageToUser string, additionalInfoForDevs ...string) {
 	logrus.Errorf("status: #{statusCode}, message: #{messageToUser},err: #{err}")
-	clientError := newClientError(err, statusCode, messageToUser, additionalInfoForDevs...)
+	clientError := NewClientError(err, statusCode, messageToUser, additionalInfoForDevs...)
 	w.WriteHeader(statusCode)
 	if err := json.NewEncoder(w).Encode(clientError); err != nil {
 		logrus.Errorf("Failed to send to caller with error: #{err}")
 	}
 }
 
-func newClientError(err error, statusCode int, messageToUser string, additionalInfoForDevs ...string) *clientError {
+func NewClientError(err error, statusCode int, messageToUser string, additionalInfoForDevs ...string) *clientError {
 	additionalInfoJoined := strings.Join(additionalInfoForDevs, "\n")
 	if additionalInfoJoined == "" {
 		additionalInfoJoined = messageToUser
@@ -108,14 +106,7 @@ func newClientError(err error, statusCode int, messageToUser string, additionalI
 	}
 }
 
-//HashString take a string and give a HashString
-func HashString(h string) string {
-	s := sha512.New()
-	s.Write([]byte(h))
-	return hex.EncodeToString(s.Sum(nil))
-}
-
-//HashPassword returns hash_password and error
+// HashPassword return hashed password and error
 func HashPassword(password string) (string, error) {
 	pass, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
