@@ -114,7 +114,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		utils.RespondError(w, http.StatusBadRequest, err, "failed to parse request body")
 		return
 	}
-	exists, existsErr := dbHelper.IsSameEmailUse(body.Email, user.ID)
+	exists, existsErr := dbHelper.IsSameEmailUsedInOtherUser(body.Email, user.ID)
 	if existsErr != nil {
 		utils.RespondError(w, http.StatusInternalServerError, existsErr, "failed to check email exits")
 		return
@@ -141,8 +141,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// Logout deletes the session associated with the currently logged-in user,
-// effectively logging them out
+// Logout deletes the session associated with the currently logged-in user
 func Logout(w http.ResponseWriter, r *http.Request) {
 	user := middlewares.UserContext(r)
 	err := dbHelper.DeleteSession(user.ID)

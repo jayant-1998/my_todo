@@ -44,7 +44,7 @@ func IsEmailExits(email string) (bool, error) {
 	return true, nil
 }
 
-func IsSameEmailUse(email string, id int) (bool, error) {
+func IsSameEmailUsedInOtherUser(email string, id int) (bool, error) {
 	SQL := `SELECT 
     			id
 			FROM 
